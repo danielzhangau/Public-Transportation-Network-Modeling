@@ -25,6 +25,7 @@ public class ArrayGrid<T> implements Grid<T> {
 			throw new IllegalArgumentException("Failed,add x or y equal or less than 0, or over axis");
 		} else {
 			arry[x][y] = element;
+			//System.out.println(arry.length);
 		}
 
 	}
@@ -39,6 +40,7 @@ public class ArrayGrid<T> implements Grid<T> {
 			//System.out.println("null");
 			return null;
 		} else {
+			//System.out.println("get");
 			return arry[x][y];
 		}
 	}
@@ -70,19 +72,31 @@ public class ArrayGrid<T> implements Grid<T> {
 
 	@Override
 	public void resize(int newWidth, int newHeight) throws IllegalArgumentException {
-		if (-newWidth > x_axis || -newHeight > y_axis){
-			throw new IllegalArgumentException("axis change decreased too much, the axis won't exist");
-		}
-		newArry = (T[][]) new Object[newWidth][newHeight];
-		for (int x = 0; x < x_axis; x++){
-			for (int y = 0; y < y_axis; y++){
-				if (arry[x][y] != null){
-					newArry[x][y] = arry[x][y];
+
+		if (newWidth <= 0 || newHeight <= 0) {
+			throw new IllegalArgumentException("Failed, newWidth or newHeight less than 0, illegal");
+		} else if (newWidth < x_axis || newHeight < y_axis) {
+			newArry = (T[][]) new Object[newWidth][newHeight];
+			for (int x = newWidth; x < x_axis; x++) {
+				for (int y = newHeight; y < y_axis; y++) {
+					if (arry[x][y] != null) {
+						throw new IllegalArgumentException("Failed, some exist elements are not able to copied to newArry");
+					}
 				}
 			}
+		} else {
+			for (int x = 0; x < x_axis; x++) {
+				for (int y = 0; y < y_axis; y++) {
+					if (arry[x][y] != null) {
+						newArry[x][y] = arry[x][y];
+					}
+				}
+			}
+			arry = newArry;
 		}
-		arry = newArry;
-	}
+	}	//throw new IllegalArgumentException("Failed, some exist elements are not able to copied to newArry");
+
+		//newArry = (T[][]) new Object[newWidth][newHeight];
 }
 
 
